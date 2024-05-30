@@ -1,6 +1,6 @@
 # projek_akhir
 
-A new Flutter project.
+Aplikasi Mobile Money Tracker
 
 ## Getting Started
 
