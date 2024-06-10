@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:projek_akhir/pages/home_page.dart';
 import 'package:projek_akhir/pages/kategori_page.dart';
+import 'package:projek_akhir/pages/transaction_page.dart';
 
 class HalamanMain extends StatefulWidget {
   const HalamanMain({super.key});
@@ -47,11 +48,19 @@ class _HalamanMainState extends State<HalamanMain> {
 
       body: _children[currentIndex], //memanggil array
 
-      floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+      floatingActionButton: Visibility(
+        visible: (currentIndex == 0) ? true : false,
+        child: FloatingActionButton(
+          onPressed: () {
+            Navigator.of(context)
+            .push(MaterialPageRoute(
+              builder: (context) => TransactionPage(),
+              ));
+          },
           backgroundColor: Color.fromARGB(255, 241, 155, 210),
           child: Icon(Icons.add)
           ),
+      ),
           floatingActionButtonLocation: 
           FloatingActionButtonLocation.centerDocked, //button tambah langsung bisa ditaruh dibagian bawah
 
