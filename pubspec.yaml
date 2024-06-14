@@ -38,10 +38,18 @@ dependencies:
   google_fonts: ^6.2.1
   calendar_appbar: ^0.0.6  
   intl: ^0.17.0
+  drift: ^2.18.0
+  sqlite3_flutter_libs: ^0.5.0
+  path_provider: ^2.0.0
+  path: ^1.9.0
+  sqlite3: 2.4.2
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  drift_dev: ^2.18.0
+  build_runner: ^2.4.9
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

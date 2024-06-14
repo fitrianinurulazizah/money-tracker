@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:projek_akhir/models/database.dart';
 
 class HalamanKategori extends StatefulWidget {
   const HalamanKategori({super.key});
@@ -11,6 +12,18 @@ class HalamanKategori extends StatefulWidget {
 
 class _HalamanKategoriState extends State<HalamanKategori> {
   bool isExpense = true;
+  final AppDatabase database = AppDatabase();
+
+  Future insert (String name, int type) async {
+    DateTime now = DateTime.now();
+
+    final row = await database.into(database.categories).insertReturning(
+      CategoriesCompanion.insert(
+        name: name, Type: type, createdAt: now, updateAt: now
+      )
+    );
+    print('Masuk : ' + row.toString()); // dikembalikan ke row
+  }
 
   void openDialog(){
     showDialog(
@@ -38,7 +51,9 @@ class _HalamanKategoriState extends State<HalamanKategori> {
                   SizedBox(
                     height: 10,
                   ),
-                  ElevatedButton(onPressed: (){}, 
+                  ElevatedButton(onPressed: (){
+                    insert("MAKAN MAKAN", 2);
+                  }, 
                   child: Text(
                     "Simpan",
                   
