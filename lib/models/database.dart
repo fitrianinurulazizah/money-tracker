@@ -1,3 +1,5 @@
+import 'dart:js_interop';
+
 import 'package:drift/drift.dart';
 
 // These additional imports are necessary to open the sqlite3 database
@@ -33,6 +35,20 @@ class AppDatabase extends _$AppDatabase {
 
   @override
   int get schemaVersion => 1;
+
+//Crud kategori
+  //balikan kategori
+  Future<List<Category>> getAllCategoryRepo(int type) async {
+    return await (select(categories)..where((tbl) => tbl.Type.equals(type))).get();
+  }
+
+  Future updateCategoryRepo(int id, String name) async {
+    return (update(categories)..where((tbl)=> tbl.id.equals(id))).write(CategoriesCompanion(name: Value(name)));
+  }
+
+  Future deleteCategoryRepo(int id) async {
+    return (delete(categories)..where((tbl) => tbl.id.equals(id))).go();
+  }
 }
 
 LazyDatabase _openConnection() {
