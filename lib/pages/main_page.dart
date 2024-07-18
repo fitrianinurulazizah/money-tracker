@@ -1,6 +1,9 @@
 import 'package:calendar_appbar/calendar_appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
+import 'package:projek_akhir/models/database.dart';
 import 'package:projek_akhir/pages/home_page.dart';
 import 'package:projek_akhir/pages/kategori_page.dart';
 import 'package:projek_akhir/pages/transaction_page.dart';
@@ -13,12 +16,76 @@ class HalamanMain extends StatefulWidget {
 }
 
 class _HalamanMainState extends State<HalamanMain> {
-  final List<Widget> _children = [HalamanHome(), HalamanKategori()];
-  int currentIndex = 0; // index 0 berarti halaman pertama membuka halaman home
+  late DateTime selectedDate;
+  late List<Widget> _children;
+  late int currentIndex; // index 0 berarti halaman pertama membuka halaman home
 
-  void onTapTapped(int index){
+  final database = AppDatabase();
+
+  @override
+  void initState(){
+    updateView(0, DateTime.now());
+
+    super.initState();
+  }
+
+  Future<List<Category>> getAllCategory() {
+    return database.select(database.categories).get();
+  }
+
+  void showAwe() async{
+    List<Category> al = await getAllCategory();
+    print('Panjang : ' +al.length.toString());
+  }
+
+  void showSuccess(BuildContext context){
+    //set up the button
+    Widget okButton = TextButton(
+      child: Text("Ok"),
+      onPressed: (){},);
+
+
+      //set up the alert dialog
+      AlertDialog alert = AlertDialog(
+    title : Text("My Title"),
+    content:  Text("This is my message"),
+    actions: [
+      okButton,
+    ],
+  );
+
+  //show the dialog
+  showDialog(
+    context: context,
+    builder : (BuildContext context){
+      return alert;
+    }
+  );
+  }
+  
+  
+  void updateView(int index, DateTime? date){
     setState(() {
-      currentIndex = index; //nilai index akan diubah"
+      if (date != null) {
+        selectedDate = DateTime.parse(DateFormat('yyyy-MM-dd').format(date));
+      }
+
+      currentIndex = index;
+      _children = [
+        HalamanHome(selectedDate: selectedDate,),
+        HalamanKategori()
+      ];
+    });
+  }
+
+  void onTabTapped(int index){
+    setState((){
+      selectedDate = DateTime.parse(DateFormat('yyyy-MM-dd').format(DateTime.now()));
+      currentIndex = index;
+      _children = [
+        HalamanHome(selectedDate: selectedDate,),
+        HalamanKategori()
+      ];
     });
   }
 
@@ -26,36 +93,19 @@ class _HalamanMainState extends State<HalamanMain> {
   Widget build(BuildContext context) {
     return Scaffold(
 
-      //Memanggil kalender
-      appBar: (currentIndex == 0) ? //jika index 0 maka akan menampilkan kalender
-      CalendarAppBar(
-        onDateChanged: (value) => print(value),
-        backButton: false,
-        accent: Color.fromARGB(255, 241, 155, 210),
-        firstDate: DateTime.now().subtract(Duration(days: 140)),
-        lastDate: DateTime.now(),
-        locale: 'id', //bahasa
-      )
-      :
-      PreferredSize(
-        child: Container(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 140),
-            child: Text('Kategori'),
-          ),
-        ),
-        preferredSize: Size.fromHeight(100),),
-
-      body: _children[currentIndex], //memanggil array
-
       floatingActionButton: Visibility(
         visible: (currentIndex == 0) ? true : false,
         child: FloatingActionButton(
           onPressed: () {
             Navigator.of(context)
             .push(MaterialPageRoute(
-              builder: (context) => TransactionPage(),
-              ));
+              builder: (context) => TransactionPage(transactionWithCategory: null,),
+              ))
+              .then((value){
+                setState((){
+                  updateView(0, DateTime.now());
+                });
+              });
           },
           backgroundColor: Color.fromARGB(255, 241, 155, 210),
           child: Icon(Icons.add)
@@ -70,26 +120,68 @@ class _HalamanMainState extends State<HalamanMain> {
         child: Row( mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             IconButton(onPressed: () {
-              onTapTapped(0);
+              updateView(0, DateTime.now());
             }, icon: Icon(CupertinoIcons.home)),
 
             IconButton(onPressed: () {
-              onTapTapped(1);
+              updateView(1, null);
             }, icon: Icon(CupertinoIcons.list_bullet)),
 
             SizedBox(
               width: 20,
             ),
             IconButton(onPressed: () {
-              onTapTapped(2);
+              
             }, icon: Icon(CupertinoIcons.heart)),
 
             IconButton(onPressed: () {
-              onTapTapped(3);
+              
             }, icon: Icon(CupertinoIcons.person)),
             ],
         ),
       ),
+
+      body: _children[currentIndex], //memanggil array
+
+      //Memanggil kalender
+      appBar: (currentIndex == 1) ? //jika index 0 maka akan menampilkan kalender
+
+      PreferredSize(
+        child: Container(
+          child: Center(
+            child: Container(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 36, horizontal: 16),
+                  child: Text('Kategori',
+              style: GoogleFonts.montserrat(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+                    ),
+              ),
+                ),
+              // mainAxisAlignment: MainAxisAlignment.center,
+              // padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 140),
+              
+            ),
+          ),
+        ),
+        preferredSize: Size.fromHeight(100),)
+        : CalendarAppBar(
+        // onDateChanged: (value) => print(value),
+        backButton: false,
+        accent: Color.fromARGB(255, 241, 155, 210),
+        
+        locale: 'id', //bahasa
+        onDateChanged: (value){
+          setState(() {
+            selectedDate = value;
+            updateView(0, selectedDate);
+          });
+        },
+        firstDate: DateTime.now().subtract(Duration(days: 140)),
+        lastDate: DateTime.now(),
+      )
     );
   }
 }

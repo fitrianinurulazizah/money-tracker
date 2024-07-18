@@ -25,9 +25,9 @@ class $CategoriesTable extends Categories
       additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 128),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
-  static const VerificationMeta _TypeMeta = const VerificationMeta('Type');
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
   @override
-  late final GeneratedColumn<int> Type = GeneratedColumn<int>(
+  late final GeneratedColumn<int> type = GeneratedColumn<int>(
       'type', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
   static const VerificationMeta _createdAtMeta =
@@ -50,7 +50,7 @@ class $CategoriesTable extends Categories
       type: DriftSqlType.dateTime, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns =>
-      [id, name, Type, createdAt, updateAt, deletedAt];
+      [id, name, type, createdAt, updateAt, deletedAt];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -72,9 +72,9 @@ class $CategoriesTable extends Categories
     }
     if (data.containsKey('type')) {
       context.handle(
-          _TypeMeta, Type.isAcceptableOrUnknown(data['type']!, _TypeMeta));
+          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
     } else if (isInserting) {
-      context.missing(_TypeMeta);
+      context.missing(_typeMeta);
     }
     if (data.containsKey('created_at')) {
       context.handle(_createdAtMeta,
@@ -105,7 +105,7 @@ class $CategoriesTable extends Categories
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      Type: attachedDatabase.typeMapping
+      type: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}type'])!,
       createdAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
@@ -125,14 +125,14 @@ class $CategoriesTable extends Categories
 class Category extends DataClass implements Insertable<Category> {
   final int id;
   final String name;
-  final int Type;
+  final int type;
   final DateTime createdAt;
   final DateTime updateAt;
   final DateTime? deletedAt;
   const Category(
       {required this.id,
       required this.name,
-      required this.Type,
+      required this.type,
       required this.createdAt,
       required this.updateAt,
       this.deletedAt});
@@ -141,7 +141,7 @@ class Category extends DataClass implements Insertable<Category> {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['name'] = Variable<String>(name);
-    map['type'] = Variable<int>(Type);
+    map['type'] = Variable<int>(type);
     map['created_at'] = Variable<DateTime>(createdAt);
     map['update_at'] = Variable<DateTime>(updateAt);
     if (!nullToAbsent || deletedAt != null) {
@@ -154,7 +154,7 @@ class Category extends DataClass implements Insertable<Category> {
     return CategoriesCompanion(
       id: Value(id),
       name: Value(name),
-      Type: Value(Type),
+      type: Value(type),
       createdAt: Value(createdAt),
       updateAt: Value(updateAt),
       deletedAt: deletedAt == null && nullToAbsent
@@ -169,7 +169,7 @@ class Category extends DataClass implements Insertable<Category> {
     return Category(
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
-      Type: serializer.fromJson<int>(json['Type']),
+      type: serializer.fromJson<int>(json['type']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updateAt: serializer.fromJson<DateTime>(json['updateAt']),
       deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
@@ -181,7 +181,7 @@ class Category extends DataClass implements Insertable<Category> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
-      'Type': serializer.toJson<int>(Type),
+      'type': serializer.toJson<int>(type),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'updateAt': serializer.toJson<DateTime>(updateAt),
       'deletedAt': serializer.toJson<DateTime?>(deletedAt),
@@ -191,14 +191,14 @@ class Category extends DataClass implements Insertable<Category> {
   Category copyWith(
           {int? id,
           String? name,
-          int? Type,
+          int? type,
           DateTime? createdAt,
           DateTime? updateAt,
           Value<DateTime?> deletedAt = const Value.absent()}) =>
       Category(
         id: id ?? this.id,
         name: name ?? this.name,
-        Type: Type ?? this.Type,
+        type: type ?? this.type,
         createdAt: createdAt ?? this.createdAt,
         updateAt: updateAt ?? this.updateAt,
         deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
@@ -208,7 +208,7 @@ class Category extends DataClass implements Insertable<Category> {
     return (StringBuffer('Category(')
           ..write('id: $id, ')
           ..write('name: $name, ')
-          ..write('Type: $Type, ')
+          ..write('type: $type, ')
           ..write('createdAt: $createdAt, ')
           ..write('updateAt: $updateAt, ')
           ..write('deletedAt: $deletedAt')
@@ -218,14 +218,14 @@ class Category extends DataClass implements Insertable<Category> {
 
   @override
   int get hashCode =>
-      Object.hash(id, name, Type, createdAt, updateAt, deletedAt);
+      Object.hash(id, name, type, createdAt, updateAt, deletedAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Category &&
           other.id == this.id &&
           other.name == this.name &&
-          other.Type == this.Type &&
+          other.type == this.type &&
           other.createdAt == this.createdAt &&
           other.updateAt == this.updateAt &&
           other.deletedAt == this.deletedAt);
@@ -234,14 +234,14 @@ class Category extends DataClass implements Insertable<Category> {
 class CategoriesCompanion extends UpdateCompanion<Category> {
   final Value<int> id;
   final Value<String> name;
-  final Value<int> Type;
+  final Value<int> type;
   final Value<DateTime> createdAt;
   final Value<DateTime> updateAt;
   final Value<DateTime?> deletedAt;
   const CategoriesCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
-    this.Type = const Value.absent(),
+    this.type = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updateAt = const Value.absent(),
     this.deletedAt = const Value.absent(),
@@ -249,18 +249,18 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
   CategoriesCompanion.insert({
     this.id = const Value.absent(),
     required String name,
-    required int Type,
+    required int type,
     required DateTime createdAt,
     required DateTime updateAt,
     this.deletedAt = const Value.absent(),
   })  : name = Value(name),
-        Type = Value(Type),
+        type = Value(type),
         createdAt = Value(createdAt),
         updateAt = Value(updateAt);
   static Insertable<Category> custom({
     Expression<int>? id,
     Expression<String>? name,
-    Expression<int>? Type,
+    Expression<int>? type,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updateAt,
     Expression<DateTime>? deletedAt,
@@ -268,7 +268,7 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (name != null) 'name': name,
-      if (Type != null) 'type': Type,
+      if (type != null) 'type': type,
       if (createdAt != null) 'created_at': createdAt,
       if (updateAt != null) 'update_at': updateAt,
       if (deletedAt != null) 'deleted_at': deletedAt,
@@ -278,14 +278,14 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
   CategoriesCompanion copyWith(
       {Value<int>? id,
       Value<String>? name,
-      Value<int>? Type,
+      Value<int>? type,
       Value<DateTime>? createdAt,
       Value<DateTime>? updateAt,
       Value<DateTime?>? deletedAt}) {
     return CategoriesCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
-      Type: Type ?? this.Type,
+      type: type ?? this.type,
       createdAt: createdAt ?? this.createdAt,
       updateAt: updateAt ?? this.updateAt,
       deletedAt: deletedAt ?? this.deletedAt,
@@ -301,8 +301,8 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     if (name.present) {
       map['name'] = Variable<String>(name.value);
     }
-    if (Type.present) {
-      map['type'] = Variable<int>(Type.value);
+    if (type.present) {
+      map['type'] = Variable<int>(type.value);
     }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
@@ -321,7 +321,7 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     return (StringBuffer('CategoriesCompanion(')
           ..write('id: $id, ')
           ..write('name: $name, ')
-          ..write('Type: $Type, ')
+          ..write('type: $type, ')
           ..write('createdAt: $createdAt, ')
           ..write('updateAt: $updateAt, ')
           ..write('deletedAt: $deletedAt')
@@ -330,12 +330,12 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
   }
 }
 
-class $TransactionTable extends Transaction
-    with TableInfo<$TransactionTable, TransactionData> {
+class $TransactionsTable extends Transactions
+    with TableInfo<$TransactionsTable, Transaction> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $TransactionTable(this.attachedDatabase, [this._alias]);
+  $TransactionsTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -402,9 +402,9 @@ class $TransactionTable extends Transaction
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'transaction';
+  static const String $name = 'transactions';
   @override
-  VerificationContext validateIntegrity(Insertable<TransactionData> instance,
+  VerificationContext validateIntegrity(Insertable<Transaction> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -461,9 +461,9 @@ class $TransactionTable extends Transaction
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  TransactionData map(Map<String, dynamic> data, {String? tablePrefix}) {
+  Transaction map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return TransactionData(
+    return Transaction(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       name: attachedDatabase.typeMapping
@@ -484,12 +484,12 @@ class $TransactionTable extends Transaction
   }
 
   @override
-  $TransactionTable createAlias(String alias) {
-    return $TransactionTable(attachedDatabase, alias);
+  $TransactionsTable createAlias(String alias) {
+    return $TransactionsTable(attachedDatabase, alias);
   }
 }
 
-class TransactionData extends DataClass implements Insertable<TransactionData> {
+class Transaction extends DataClass implements Insertable<Transaction> {
   final int id;
   final String name;
   final int category_id;
@@ -498,7 +498,7 @@ class TransactionData extends DataClass implements Insertable<TransactionData> {
   final DateTime createdAt;
   final DateTime updateAt;
   final DateTime? deletedAt;
-  const TransactionData(
+  const Transaction(
       {required this.id,
       required this.name,
       required this.category_id,
@@ -523,8 +523,8 @@ class TransactionData extends DataClass implements Insertable<TransactionData> {
     return map;
   }
 
-  TransactionCompanion toCompanion(bool nullToAbsent) {
-    return TransactionCompanion(
+  TransactionsCompanion toCompanion(bool nullToAbsent) {
+    return TransactionsCompanion(
       id: Value(id),
       name: Value(name),
       category_id: Value(category_id),
@@ -538,10 +538,10 @@ class TransactionData extends DataClass implements Insertable<TransactionData> {
     );
   }
 
-  factory TransactionData.fromJson(Map<String, dynamic> json,
+  factory Transaction.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return TransactionData(
+    return Transaction(
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
       category_id: serializer.fromJson<int>(json['category_id']),
@@ -567,7 +567,7 @@ class TransactionData extends DataClass implements Insertable<TransactionData> {
     };
   }
 
-  TransactionData copyWith(
+  Transaction copyWith(
           {int? id,
           String? name,
           int? category_id,
@@ -576,7 +576,7 @@ class TransactionData extends DataClass implements Insertable<TransactionData> {
           DateTime? createdAt,
           DateTime? updateAt,
           Value<DateTime?> deletedAt = const Value.absent()}) =>
-      TransactionData(
+      Transaction(
         id: id ?? this.id,
         name: name ?? this.name,
         category_id: category_id ?? this.category_id,
@@ -588,7 +588,7 @@ class TransactionData extends DataClass implements Insertable<TransactionData> {
       );
   @override
   String toString() {
-    return (StringBuffer('TransactionData(')
+    return (StringBuffer('Transaction(')
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('category_id: $category_id, ')
@@ -607,7 +607,7 @@ class TransactionData extends DataClass implements Insertable<TransactionData> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is TransactionData &&
+      (other is Transaction &&
           other.id == this.id &&
           other.name == this.name &&
           other.category_id == this.category_id &&
@@ -618,7 +618,7 @@ class TransactionData extends DataClass implements Insertable<TransactionData> {
           other.deletedAt == this.deletedAt);
 }
 
-class TransactionCompanion extends UpdateCompanion<TransactionData> {
+class TransactionsCompanion extends UpdateCompanion<Transaction> {
   final Value<int> id;
   final Value<String> name;
   final Value<int> category_id;
@@ -627,7 +627,7 @@ class TransactionCompanion extends UpdateCompanion<TransactionData> {
   final Value<DateTime> createdAt;
   final Value<DateTime> updateAt;
   final Value<DateTime?> deletedAt;
-  const TransactionCompanion({
+  const TransactionsCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.category_id = const Value.absent(),
@@ -637,7 +637,7 @@ class TransactionCompanion extends UpdateCompanion<TransactionData> {
     this.updateAt = const Value.absent(),
     this.deletedAt = const Value.absent(),
   });
-  TransactionCompanion.insert({
+  TransactionsCompanion.insert({
     this.id = const Value.absent(),
     required String name,
     required int category_id,
@@ -652,7 +652,7 @@ class TransactionCompanion extends UpdateCompanion<TransactionData> {
         amount = Value(amount),
         createdAt = Value(createdAt),
         updateAt = Value(updateAt);
-  static Insertable<TransactionData> custom({
+  static Insertable<Transaction> custom({
     Expression<int>? id,
     Expression<String>? name,
     Expression<int>? category_id,
@@ -674,7 +674,7 @@ class TransactionCompanion extends UpdateCompanion<TransactionData> {
     });
   }
 
-  TransactionCompanion copyWith(
+  TransactionsCompanion copyWith(
       {Value<int>? id,
       Value<String>? name,
       Value<int>? category_id,
@@ -683,7 +683,7 @@ class TransactionCompanion extends UpdateCompanion<TransactionData> {
       Value<DateTime>? createdAt,
       Value<DateTime>? updateAt,
       Value<DateTime?>? deletedAt}) {
-    return TransactionCompanion(
+    return TransactionsCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
       category_id: category_id ?? this.category_id,
@@ -727,7 +727,7 @@ class TransactionCompanion extends UpdateCompanion<TransactionData> {
 
   @override
   String toString() {
-    return (StringBuffer('TransactionCompanion(')
+    return (StringBuffer('TransactionsCompanion(')
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('category_id: $category_id, ')
@@ -745,18 +745,19 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   _$AppDatabaseManager get managers => _$AppDatabaseManager(this);
   late final $CategoriesTable categories = $CategoriesTable(this);
-  late final $TransactionTable Transaction = $TransactionTable(this);
+  late final $TransactionsTable transactions = $TransactionsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [categories, Transaction];
+  List<DatabaseSchemaEntity> get allSchemaEntities =>
+      [categories, transactions];
 }
 
 typedef $$CategoriesTableInsertCompanionBuilder = CategoriesCompanion Function({
   Value<int> id,
   required String name,
-  required int Type,
+  required int type,
   required DateTime createdAt,
   required DateTime updateAt,
   Value<DateTime?> deletedAt,
@@ -764,7 +765,7 @@ typedef $$CategoriesTableInsertCompanionBuilder = CategoriesCompanion Function({
 typedef $$CategoriesTableUpdateCompanionBuilder = CategoriesCompanion Function({
   Value<int> id,
   Value<String> name,
-  Value<int> Type,
+  Value<int> type,
   Value<DateTime> createdAt,
   Value<DateTime> updateAt,
   Value<DateTime?> deletedAt,
@@ -792,7 +793,7 @@ class $$CategoriesTableTableManager extends RootTableManager<
           getUpdateCompanionBuilder: ({
             Value<int> id = const Value.absent(),
             Value<String> name = const Value.absent(),
-            Value<int> Type = const Value.absent(),
+            Value<int> type = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<DateTime> updateAt = const Value.absent(),
             Value<DateTime?> deletedAt = const Value.absent(),
@@ -800,7 +801,7 @@ class $$CategoriesTableTableManager extends RootTableManager<
               CategoriesCompanion(
             id: id,
             name: name,
-            Type: Type,
+            type: type,
             createdAt: createdAt,
             updateAt: updateAt,
             deletedAt: deletedAt,
@@ -808,7 +809,7 @@ class $$CategoriesTableTableManager extends RootTableManager<
           getInsertCompanionBuilder: ({
             Value<int> id = const Value.absent(),
             required String name,
-            required int Type,
+            required int type,
             required DateTime createdAt,
             required DateTime updateAt,
             Value<DateTime?> deletedAt = const Value.absent(),
@@ -816,7 +817,7 @@ class $$CategoriesTableTableManager extends RootTableManager<
               CategoriesCompanion.insert(
             id: id,
             name: name,
-            Type: Type,
+            type: type,
             createdAt: createdAt,
             updateAt: updateAt,
             deletedAt: deletedAt,
@@ -849,8 +850,8 @@ class $$CategoriesTableFilterComposer
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
-  ColumnFilters<int> get Type => $state.composableBuilder(
-      column: $state.table.Type,
+  ColumnFilters<int> get type => $state.composableBuilder(
+      column: $state.table.type,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -883,8 +884,8 @@ class $$CategoriesTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
-  ColumnOrderings<int> get Type => $state.composableBuilder(
-      column: $state.table.Type,
+  ColumnOrderings<int> get type => $state.composableBuilder(
+      column: $state.table.type,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
@@ -904,7 +905,7 @@ class $$CategoriesTableOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-typedef $$TransactionTableInsertCompanionBuilder = TransactionCompanion
+typedef $$TransactionsTableInsertCompanionBuilder = TransactionsCompanion
     Function({
   Value<int> id,
   required String name,
@@ -915,7 +916,7 @@ typedef $$TransactionTableInsertCompanionBuilder = TransactionCompanion
   required DateTime updateAt,
   Value<DateTime?> deletedAt,
 });
-typedef $$TransactionTableUpdateCompanionBuilder = TransactionCompanion
+typedef $$TransactionsTableUpdateCompanionBuilder = TransactionsCompanion
     Function({
   Value<int> id,
   Value<String> name,
@@ -927,25 +928,25 @@ typedef $$TransactionTableUpdateCompanionBuilder = TransactionCompanion
   Value<DateTime?> deletedAt,
 });
 
-class $$TransactionTableTableManager extends RootTableManager<
+class $$TransactionsTableTableManager extends RootTableManager<
     _$AppDatabase,
-    $TransactionTable,
-    TransactionData,
-    $$TransactionTableFilterComposer,
-    $$TransactionTableOrderingComposer,
-    $$TransactionTableProcessedTableManager,
-    $$TransactionTableInsertCompanionBuilder,
-    $$TransactionTableUpdateCompanionBuilder> {
-  $$TransactionTableTableManager(_$AppDatabase db, $TransactionTable table)
+    $TransactionsTable,
+    Transaction,
+    $$TransactionsTableFilterComposer,
+    $$TransactionsTableOrderingComposer,
+    $$TransactionsTableProcessedTableManager,
+    $$TransactionsTableInsertCompanionBuilder,
+    $$TransactionsTableUpdateCompanionBuilder> {
+  $$TransactionsTableTableManager(_$AppDatabase db, $TransactionsTable table)
       : super(TableManagerState(
           db: db,
           table: table,
           filteringComposer:
-              $$TransactionTableFilterComposer(ComposerState(db, table)),
+              $$TransactionsTableFilterComposer(ComposerState(db, table)),
           orderingComposer:
-              $$TransactionTableOrderingComposer(ComposerState(db, table)),
+              $$TransactionsTableOrderingComposer(ComposerState(db, table)),
           getChildManagerBuilder: (p) =>
-              $$TransactionTableProcessedTableManager(p),
+              $$TransactionsTableProcessedTableManager(p),
           getUpdateCompanionBuilder: ({
             Value<int> id = const Value.absent(),
             Value<String> name = const Value.absent(),
@@ -956,7 +957,7 @@ class $$TransactionTableTableManager extends RootTableManager<
             Value<DateTime> updateAt = const Value.absent(),
             Value<DateTime?> deletedAt = const Value.absent(),
           }) =>
-              TransactionCompanion(
+              TransactionsCompanion(
             id: id,
             name: name,
             category_id: category_id,
@@ -976,7 +977,7 @@ class $$TransactionTableTableManager extends RootTableManager<
             required DateTime updateAt,
             Value<DateTime?> deletedAt = const Value.absent(),
           }) =>
-              TransactionCompanion.insert(
+              TransactionsCompanion.insert(
             id: id,
             name: name,
             category_id: category_id,
@@ -989,21 +990,21 @@ class $$TransactionTableTableManager extends RootTableManager<
         ));
 }
 
-class $$TransactionTableProcessedTableManager extends ProcessedTableManager<
+class $$TransactionsTableProcessedTableManager extends ProcessedTableManager<
     _$AppDatabase,
-    $TransactionTable,
-    TransactionData,
-    $$TransactionTableFilterComposer,
-    $$TransactionTableOrderingComposer,
-    $$TransactionTableProcessedTableManager,
-    $$TransactionTableInsertCompanionBuilder,
-    $$TransactionTableUpdateCompanionBuilder> {
-  $$TransactionTableProcessedTableManager(super.$state);
+    $TransactionsTable,
+    Transaction,
+    $$TransactionsTableFilterComposer,
+    $$TransactionsTableOrderingComposer,
+    $$TransactionsTableProcessedTableManager,
+    $$TransactionsTableInsertCompanionBuilder,
+    $$TransactionsTableUpdateCompanionBuilder> {
+  $$TransactionsTableProcessedTableManager(super.$state);
 }
 
-class $$TransactionTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $TransactionTable> {
-  $$TransactionTableFilterComposer(super.$state);
+class $$TransactionsTableFilterComposer
+    extends FilterComposer<_$AppDatabase, $TransactionsTable> {
+  $$TransactionsTableFilterComposer(super.$state);
   ColumnFilters<int> get id => $state.composableBuilder(
       column: $state.table.id,
       builder: (column, joinBuilders) =>
@@ -1045,9 +1046,9 @@ class $$TransactionTableFilterComposer
           ColumnFilters(column, joinBuilders: joinBuilders));
 }
 
-class $$TransactionTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $TransactionTable> {
-  $$TransactionTableOrderingComposer(super.$state);
+class $$TransactionsTableOrderingComposer
+    extends OrderingComposer<_$AppDatabase, $TransactionsTable> {
+  $$TransactionsTableOrderingComposer(super.$state);
   ColumnOrderings<int> get id => $state.composableBuilder(
       column: $state.table.id,
       builder: (column, joinBuilders) =>
@@ -1094,6 +1095,6 @@ class _$AppDatabaseManager {
   _$AppDatabaseManager(this._db);
   $$CategoriesTableTableManager get categories =>
       $$CategoriesTableTableManager(_db, _db.categories);
-  $$TransactionTableTableManager get transaction =>
-      $$TransactionTableTableManager(_db, _db.Transaction);
+  $$TransactionsTableTableManager get transactions =>
+      $$TransactionsTableTableManager(_db, _db.transactions);
 }
